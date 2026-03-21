@@ -3,135 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>トレード求人 | IT・金融・トレード関連の求人情報</title>
+  <title>JobConnect | かんたん求人掲載・求人検索</title>
+  <meta name="description" content="無料で求人掲載。企業も求職者もかんたんに使える求人プラットフォーム。">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    .logo { background: linear-gradient(135deg, #ff9800, #ff5722); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero h1 { background: linear-gradient(135deg, #fff, #ff9800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-primary { background: linear-gradient(135deg, #ff9800, #ff5722); }
+
+    /* 検索バー */
+    .search-bar {
+      display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1; min-width: 200px; padding: 14px 18px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; color: #fff; font-size: 1rem;
+    }
+    .search-input:focus { outline: none; border-color: rgba(255,152,0,.5); }
+    .search-input::placeholder { color: #666; }
+    .search-btn {
+      padding: 14px 28px; background: linear-gradient(135deg, #ff9800, #ff5722);
+      border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer;
+      font-size: .95rem; transition: transform .2s;
+    }
+    .search-btn:hover { transform: translateY(-2px); }
+
+    /* フィルタータグ */
+    .filter-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .filter-tag {
+      padding: 6px 16px; border-radius: 20px; font-size: .8rem; font-weight: 600;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      color: #999; cursor: pointer; transition: all .2s;
+    }
+    .filter-tag:hover, .filter-tag.active {
+      background: rgba(255,152,0,.15); border-color: rgba(255,152,0,.4); color: #ff9800;
+    }
+
+    /* 求人カード */
     .job-card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 20px;
-      transition: border-color .2s;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding: 28px; margin-bottom: 20px; transition: all .2s;
     }
-    .job-card:hover { border-color: rgba(79,195,247,.3); }
-    .job-company { font-size: .85rem; color: #4fc3f7; margin-bottom: 4px; }
-    .job-title { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
-    .job-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .job-card:hover { border-color: rgba(255,152,0,.3); transform: translateY(-2px); }
+    .job-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+    .job-company { font-size: .85rem; color: #ff9800; margin-bottom: 4px; font-weight: 600; }
+    .job-title { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 14px; }
+    .job-salary {
+      font-size: 1.1rem; font-weight: 800; color: #66bb6a;
+      background: rgba(102,187,106,.1); padding: 6px 14px; border-radius: 8px;
+      white-space: nowrap;
+    }
+    .job-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .job-tag {
-      padding: 4px 12px;
-      background: rgba(79,195,247,.1);
-      border: 1px solid rgba(79,195,247,.2);
-      border-radius: 20px;
-      font-size: .75rem;
-      color: #4fc3f7;
+      padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 600;
+      background: rgba(255,152,0,.1); border: 1px solid rgba(255,152,0,.2); color: #ff9800;
     }
-    .job-salary { font-size: 1rem; color: #66bb6a; font-weight: 600; margin-bottom: 8px; }
-    .job-desc { font-size: .9rem; color: #999; }
-    .post-job-box {
-      background: linear-gradient(135deg, rgba(79,195,247,.08), rgba(171,71,188,.08));
-      border: 1px solid rgba(79,195,247,.2);
-      border-radius: 16px;
-      padding: 40px;
-      text-align: center;
-      margin-top: 48px;
+    .job-info { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .job-info-item { font-size: .85rem; color: #999; }
+    .job-info-item span { color: #ccc; font-weight: 500; }
+    .job-desc { font-size: .9rem; color: #999; line-height: 1.6; margin-bottom: 16px; }
+    .job-features { list-style: none; margin-bottom: 16px; }
+    .job-features li { font-size: .85rem; color: #ccc; padding: 3px 0; }
+    .job-features li::before { content: '✓ '; color: #66bb6a; font-weight: 700; }
+    .apply-btn {
+      display: inline-block; padding: 10px 28px; border-radius: 8px; font-size: .9rem; font-weight: 700;
+      background: linear-gradient(135deg, #ff9800, #ff5722); color: #fff; transition: transform .2s;
     }
-    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px; margin: 32px 0; }
+    .apply-btn:hover { transform: translateY(-2px); color: #fff; }
+
+    /* 無料掲載バナー */
+    .free-banner {
+      background: linear-gradient(135deg, rgba(255,152,0,.1), rgba(255,87,34,.1));
+      border: 1px solid rgba(255,152,0,.3); border-radius: 16px;
+      padding: 36px; text-align: center; margin-bottom: 48px;
+    }
+    .free-banner h2 { color: #fff; font-size: 1.4rem; margin-bottom: 8px; }
+    .free-banner .highlight { color: #ff9800; font-size: 2rem; font-weight: 800; }
+    .free-banner p { color: #999; font-size: .9rem; margin-bottom: 20px; }
+
+    /* 掲載フロー */
+    .post-flow { max-width: 600px; margin: 0 auto; }
+    .flow-item { display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+    .flow-num {
+      width: 40px; height: 40px; background: linear-gradient(135deg, #ff9800, #ff5722);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .flow-item h3 { color: #fff; font-size: 1rem; margin-bottom: 4px; }
+    .flow-item p { color: #999; font-size: .85rem; }
+
+    /* 料金 */
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin: 32px 0; }
     .plan-card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 12px;
-      padding: 28px;
-      text-align: center;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding: 28px; text-align: center;
     }
-    .plan-card.recommended { border-color: rgba(79,195,247,.4); }
+    .plan-card.featured { border-color: rgba(255,152,0,.4); }
     .plan-name { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .plan-price { font-size: 1.8rem; font-weight: 800; color: #4fc3f7; margin-bottom: 4px; }
-    .plan-detail { font-size: .85rem; color: #999; margin-bottom: 16px; }
-    .plan-features { list-style: none; text-align: left; font-size: .85rem; color: #ccc; }
+    .plan-price { font-size: 2rem; font-weight: 800; color: #ff9800; }
+    .plan-unit { font-size: .85rem; color: #888; margin-bottom: 16px; }
+    .plan-features { list-style: none; text-align: left; font-size: .85rem; color: #ccc; margin-bottom: 20px; }
     .plan-features li { padding: 4px 0; }
-    .plan-features li::before { content: '✓ '; color: #66bb6a; }
+    .plan-features li::before { content: '✓ '; color: #66bb6a; font-weight: 700; }
+
+    /* 統計 */
+    .stats-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+    .stat-item { text-align: center; }
+    .stat-item .num { font-size: 2rem; font-weight: 800; color: #ff9800; }
+    .stat-item .label { font-size: .8rem; color: #888; }
+
+    @media (max-width: 600px) {
+      .job-header { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
+
   <header class="header">
     <div class="header-inner">
-      <div class="logo">トレード求人</div>
+      <div class="logo">JobConnect</div>
       <button class="hamburger" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
       <ul class="nav">
-        <li><a href="#" style="color:#4fc3f7;">求人一覧</a></li>
-        <li><a href="#post">掲載する</a></li>
+        <li><a href="#jobs">求人を探す</a></li>
+        <li><a href="#post">求人を掲載</a></li>
       </ul>
     </div>
   </header>
 
-  <section class="section" style="padding-top:120px;">
-    <h2 class="section-title">求人情報</h2>
-    <p class="section-sub">IT・トレード・金融関連の求人</p>
-
-    <!-- 求人一覧（サンプル） -->
-    <div class="job-card">
-      <div class="job-company">株式会社サンプルテック</div>
-      <div class="job-title">Pythonエンジニア（AI/ML）</div>
-      <div class="job-tags">
-        <span class="job-tag">Python</span>
-        <span class="job-tag">機械学習</span>
-        <span class="job-tag">リモートOK</span>
-        <span class="job-tag">正社員</span>
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div>
+      <h1>あなたにピッタリの仕事を見つけよう</h1>
+      <p>幅広いジャンルの求人情報を掲載中。<br>企業の方は無料で求人掲載できます。</p>
+      <div class="stats-row">
+        <div class="stat-item"><div class="num">2</div><div class="label">掲載求人数</div></div>
+        <div class="stat-item"><div class="num">2</div><div class="label">掲載企業数</div></div>
+        <div class="stat-item"><div class="num">無料</div><div class="label">掲載料（50件まで）</div></div>
       </div>
-      <div class="job-salary">年収 600万〜1,000万円</div>
-      <div class="job-desc">AI/MLを活用したトレーディングシステムの開発。CatBoost、LightGBMなどの経験者歓迎。</div>
-    </div>
-
-    <div class="job-card">
-      <div class="job-company">FXブローカー ABC</div>
-      <div class="job-title">カスタマーサポート（日本語）</div>
-      <div class="job-tags">
-        <span class="job-tag">カスタマーサポート</span>
-        <span class="job-tag">FX知識</span>
-        <span class="job-tag">在宅勤務</span>
-        <span class="job-tag">契約社員</span>
-      </div>
-      <div class="job-salary">月給 30万〜45万円</div>
-      <div class="job-desc">海外FXブローカーの日本語カスタマーサポート。FX取引の基本知識がある方。</div>
-    </div>
-
-    <div class="job-card">
-      <div class="job-company">株式会社データアナリシス</div>
-      <div class="job-title">データアナリスト（競輪・競馬）</div>
-      <div class="job-tags">
-        <span class="job-tag">データ分析</span>
-        <span class="job-tag">Python/R</span>
-        <span class="job-tag">公営競技</span>
-        <span class="job-tag">業務委託</span>
-      </div>
-      <div class="job-salary">時給 3,000〜5,000円</div>
-      <div class="job-desc">公営競技のデータ分析・予想モデル構築。統計学・機械学習の知識がある方。</div>
+      <a href="#jobs" class="btn-primary">求人を見る</a>
+      <a href="#post" class="btn-primary" style="margin-left:12px; background:transparent; border:1px solid rgba(255,152,0,.5); color:#ff9800;">求人を掲載する</a>
     </div>
   </section>
 
   <hr class="divider">
 
-  <!-- 求人掲載プラン -->
-  <section class="section">
-    <div class="post-job-box">
-      <h3 style="font-size:1.4rem; color:#fff; margin-bottom:8px;">求人を掲載しませんか？</h3>
-      <p style="color:#999; margin-bottom:24px;">IT・金融・トレード関連の人材にリーチ</p>
+  <!-- 求人一覧 -->
+  <section class="section" id="jobs">
+    <h2 class="section-title">求人一覧</h2>
+    <p class="section-sub">あなたに合った仕事を探そう</p>
 
+    <!-- 検索 -->
+    <div class="search-bar">
+      <input class="search-input" type="text" placeholder="キーワードで検索（職種、勤務地など）" id="searchInput" oninput="filterJobs()">
+      <button class="search-btn" onclick="filterJobs()">検索</button>
+    </div>
+
+    <!-- フィルター -->
+    <div class="filter-tags">
+      <span class="filter-tag active" onclick="setFilter(this, 'all')">すべて</span>
+      <span class="filter-tag" onclick="setFilter(this, '配送')">配送</span>
+      <span class="filter-tag" onclick="setFilter(this, '神奈川')">神奈川</span>
+      <span class="filter-tag" onclick="setFilter(this, '東京')">東京</span>
+      <span class="filter-tag" onclick="setFilter(this, '未経験OK')">未経験OK</span>
+      <span class="filter-tag" onclick="setFilter(this, '業務委託')">業務委託</span>
+    </div>
+
+    <!-- 求人カード1: BURNING BROS. -->
+    <div class="job-card" data-keywords="配送 ドライバー 神奈川 相模原 横浜 未経験OK 業務委託 BURNING BROS">
+      <div class="job-header">
+        <div>
+          <div class="job-company">BURNING BROS.株式会社</div>
+          <div class="job-title">配送スタッフ（軽貨物ドライバー）</div>
+        </div>
+        <div class="job-salary">月給 40万〜45万円</div>
+      </div>
+      <div class="job-tags">
+        <span class="job-tag">配送</span>
+        <span class="job-tag">業務委託</span>
+        <span class="job-tag">未経験OK</span>
+        <span class="job-tag">年齢不問</span>
+        <span class="job-tag">神奈川</span>
+      </div>
+      <div class="job-info">
+        <div class="job-info-item">勤務地: <span>神奈川県相模原市南区上鶴間本町</span></div>
+        <div class="job-info-item">雇用形態: <span>業務委託</span></div>
+        <div class="job-info-item">免許: <span>普通自動車免許（AT可）</span></div>
+        <div class="job-info-item">給与形態: <span>歩合制（運んだ分だけ稼げる）</span></div>
+      </div>
+      <div class="job-desc">
+        小包の配送業務。配送先の約7〜8割は個人宅。基本的に荷物は小型で運びやすいです。横浜市など希望エリアでの配送も選択可能。
+      </div>
+      <ul class="job-features">
+        <li>未経験者歓迎・ブランクOK</li>
+        <li>制服・台車無料貸与</li>
+        <li>車両リース39,000円（車検・メンテ・修理・保険込み）</li>
+        <li>同乗研修制度あり</li>
+        <li>個別カウンセリングで働き方サポート</li>
+        <li>希望エリアに住める社宅制度あり</li>
+      </ul>
+      <a href="https://clients.itszai.jp/4e4441784e773d3d/recruitments/30?ref=true" target="_blank" rel="noopener" class="apply-btn">この求人に応募する</a>
+    </div>
+
+    <!-- 求人カード2: 大翔商配 -->
+    <div class="job-card" data-keywords="配送 ドライバー 東京 未経験OK 業務委託 大翔商配">
+      <div class="job-header">
+        <div>
+          <div class="job-company">株式会社大翔商配</div>
+          <div class="job-title">配送スタッフ（軽貨物ドライバー）</div>
+        </div>
+        <div class="job-salary">月給 40万〜45万円</div>
+      </div>
+      <div class="job-tags">
+        <span class="job-tag">配送</span>
+        <span class="job-tag">業務委託</span>
+        <span class="job-tag">未経験OK</span>
+        <span class="job-tag">年齢不問</span>
+        <span class="job-tag">東京</span>
+      </div>
+      <div class="job-info">
+        <div class="job-info-item">勤務地: <span>東京都</span></div>
+        <div class="job-info-item">雇用形態: <span>業務委託</span></div>
+        <div class="job-info-item">免許: <span>普通自動車免許（AT可）</span></div>
+        <div class="job-info-item">給与形態: <span>歩合制（運んだ分だけ稼げる）</span></div>
+      </div>
+      <div class="job-desc">
+        小包の配送業務。配送先の約7〜8割は個人宅。基本的に荷物は小型で運びやすいです。
+      </div>
+      <ul class="job-features">
+        <li>未経験者歓迎・ブランクOK</li>
+        <li>制服・台車無料貸与</li>
+        <li>車両リース39,000円（車検・メンテ・修理・保険込み）</li>
+        <li>同乗研修制度あり</li>
+        <li>個別カウンセリングで働き方サポート</li>
+      </ul>
+      <a href="https://clients.itszai.jp/4e4441794e773d3d/recruitments/8?ref=true" target="_blank" rel="noopener" class="apply-btn">この求人に応募する</a>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- 求人掲載セクション -->
+  <section class="section" id="post">
+    <div class="free-banner">
+      <h2>求人掲載しませんか？</h2>
+      <div class="highlight">今なら無料！</div>
+      <p>先着50件まで掲載無料。あなたの会社の求人を今すぐ掲載しよう。</p>
+      <a href="#post-flow" class="btn-primary">無料で掲載する</a>
+    </div>
+
+    <h2 class="section-title" id="post-flow">掲載の流れ</h2>
+    <p class="section-sub">かんたん3ステップで求人掲載</p>
+
+    <div class="post-flow">
+      <div class="flow-item">
+        <div class="flow-num">1</div>
+        <div><h3>求人情報を送信</h3><p>下のフォームから会社名・職種・条件などを入力して送信。</p></div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">2</div>
+        <div><h3>内容確認・掲載</h3><p>内容を確認後、1営業日以内にサイトに掲載します。</p></div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">3</div>
+        <div><h3>応募者とマッチング</h3><p>求職者からの応募を受け付け開始。応募はメールで通知されます。</p></div>
+      </div>
+    </div>
+
+    <!-- 掲載フォーム -->
+    <div style="max-width:600px; margin:40px auto 0; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:36px;">
+      <h3 style="color:#fff; font-size:1.2rem; margin-bottom:24px; text-align:center;">求人掲載フォーム</h3>
+      <form onsubmit="return handlePostJob(event)">
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">会社名 *</label>
+          <input type="text" required style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">担当者名 *</label>
+          <input type="text" required style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">メールアドレス *</label>
+          <input type="email" required style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">職種 *</label>
+          <input type="text" required placeholder="例: 配送スタッフ、Webエンジニア" style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">勤務地 *</label>
+          <input type="text" required placeholder="例: 東京都渋谷区" style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">給与 *</label>
+          <input type="text" required placeholder="例: 月給30万〜45万円" style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">雇用形態 *</label>
+          <select required style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
+            <option value="">選択してください</option>
+            <option>正社員</option><option>契約社員</option><option>業務委託</option>
+            <option>パート・アルバイト</option><option>派遣</option>
+          </select>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">仕事内容・アピールポイント *</label>
+          <textarea rows="5" required placeholder="仕事の内容、福利厚生、求める人材像など" style="width:100%; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem; resize:vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:100%; padding:14px; font-size:1rem;">無料で求人を掲載する</button>
+        <p style="text-align:center; font-size:.75rem; color:#666; margin-top:12px;">50件まで無料。51件目以降は有料プランとなります。</p>
+      </form>
+    </div>
+
+    <!-- 有料プラン -->
+    <div style="margin-top:60px;">
+      <h3 style="color:#fff; font-size:1.2rem; margin-bottom:8px; text-align:center;">有料プラン（51件目以降）</h3>
+      <p style="color:#888; text-align:center; margin-bottom:24px; font-size:.9rem;">より多くの求職者にリーチしたい企業様向け</p>
       <div class="plan-grid">
         <div class="plan-card">
           <div class="plan-name">ライトプラン</div>
-          <div class="plan-price">&#165;5,000</div>
-          <div class="plan-detail">/ 30日間</div>
+          <div class="plan-price">¥5,000</div>
+          <div class="plan-unit">/ 30日間</div>
           <ul class="plan-features">
             <li>求人1件掲載</li>
             <li>基本テンプレート</li>
           </ul>
         </div>
-        <div class="plan-card recommended">
-          <div class="plan-name" style="color:#4fc3f7;">スタンダードプラン</div>
-          <div class="plan-price">&#165;15,000</div>
-          <div class="plan-detail">/ 30日間</div>
+        <div class="plan-card featured">
+          <div class="plan-name" style="color:#ff9800;">スタンダードプラン</div>
+          <div class="plan-price">¥15,000</div>
+          <div class="plan-unit">/ 30日間</div>
           <ul class="plan-features">
             <li>求人3件まで掲載</li>
             <li>トップページに表示</li>
@@ -140,8 +342,8 @@
         </div>
         <div class="plan-card">
           <div class="plan-name">プレミアムプラン</div>
-          <div class="plan-price">&#165;30,000</div>
-          <div class="plan-detail">/ 30日間</div>
+          <div class="plan-price">¥30,000</div>
+          <div class="plan-unit">/ 30日間</div>
           <ul class="plan-features">
             <li>求人無制限掲載</li>
             <li>トップページ最上部</li>
@@ -150,13 +352,41 @@
           </ul>
         </div>
       </div>
-
-      <a href="#post" class="btn-primary">掲載のお問い合わせ</a>
     </div>
   </section>
 
   <footer class="footer">
-    <p>&copy; 2026 BURNING TRADE. All rights reserved.</p>
+    <p>&copy; 2026 JobConnect. All rights reserved.</p>
   </footer>
+
+  <script>
+    function filterJobs() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      document.querySelectorAll('.job-card').forEach(card => {
+        const kw = (card.dataset.keywords || '').toLowerCase();
+        const text = card.textContent.toLowerCase();
+        card.style.display = (q === '' || kw.includes(q) || text.includes(q)) ? '' : 'none';
+      });
+    }
+
+    let currentFilter = 'all';
+    function setFilter(el, filter) {
+      document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      currentFilter = filter;
+      document.querySelectorAll('.job-card').forEach(card => {
+        if (filter === 'all') { card.style.display = ''; return; }
+        const kw = (card.dataset.keywords || '').toLowerCase();
+        card.style.display = kw.includes(filter.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    function handlePostJob(e) {
+      e.preventDefault();
+      alert('求人掲載のお申し込みありがとうございます！\n内容を確認の上、1営業日以内に掲載いたします。');
+      e.target.reset();
+      return false;
+    }
+  </script>
 </body>
 </html>
