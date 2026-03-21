@@ -121,6 +121,10 @@
   <header class="header">
     <div class="header-inner">
       <div class="logo">JobConnect</div>
+      <div style="display:flex; align-items:center; gap:8px;" id="authBar">
+        <button onclick="showAuthModal('seeker')" style="padding:6px 14px; border-radius:8px; font-size:.8rem; font-weight:600; background:#f5f5f5; border:1px solid #ddd; color:#555; cursor:pointer;">求職者ログイン</button>
+        <button onclick="showAuthModal('company')" style="padding:6px 14px; border-radius:8px; font-size:.8rem; font-weight:600; background:linear-gradient(135deg,#ff9800,#ff5722); border:none; color:#fff; cursor:pointer;">企業ログイン</button>
+      </div>
       <button class="hamburger" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
       <ul class="nav">
         <li><a href="#jobs">求人を探す</a></li>
@@ -128,6 +132,28 @@
       </ul>
     </div>
   </header>
+
+  <!-- 認証モーダル -->
+  <div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.5); z-index:200; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:36px; max-width:420px; width:90%; margin:auto; position:relative; margin-top:15vh;">
+      <button onclick="closeAuthModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.5rem; color:#999; cursor:pointer;">&times;</button>
+      <h3 id="authModalTitle" style="color:#333; font-size:1.2rem; margin-bottom:8px; text-align:center;"></h3>
+      <p id="authModalSub" style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;"></p>
+      <button onclick="handleGoogleLogin()" style="width:100%; padding:14px; border-radius:10px; font-size:1rem; font-weight:600; background:#fff; border:1px solid #ddd; color:#333; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px;">
+        <span style="font-size:1.2rem;">G</span> Googleアカウントで新規登録 / ログイン
+      </button>
+      <p style="text-align:center; font-size:.75rem; color:#aaa;">Googleアカウントで簡単に登録・ログインできます</p>
+    </div>
+  </div>
+
+  <!-- 企業マイページモーダル -->
+  <div id="myPageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.5); z-index:200;">
+    <div style="background:#fff; border-radius:16px; padding:36px; max-width:600px; width:90%; margin:15vh auto; position:relative; max-height:70vh; overflow-y:auto;">
+      <button onclick="closeMyPage()" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.5rem; color:#999; cursor:pointer;">&times;</button>
+      <h3 style="color:#333; font-size:1.2rem; margin-bottom:20px;">マイページ</h3>
+      <div id="myPageContent"></div>
+    </div>
+  </div>
 
   <!-- ヒーロー -->
   <section class="hero">
@@ -272,35 +298,36 @@
     </div>
 
     <!-- 掲載フォーム -->
-    <div style="max-width:600px; margin:40px auto 0; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:36px;">
-      <h3 style="color:#fff; font-size:1.2rem; margin-bottom:24px; text-align:center;">求人掲載フォーム</h3>
+    <div style="max-width:600px; margin:40px auto 0; background:#fff; border:1px solid #eee; border-radius:16px; padding:36px; box-shadow:0 2px 12px rgba(0,0,0,.06);">
+      <h3 style="color:#333; font-size:1.2rem; margin-bottom:4px; text-align:center;">求人掲載フォーム</h3>
+      <p style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;">企業アカウントでログイン後、求人を掲載できます</p>
       <form onsubmit="return handlePostJob(event)">
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">会社名 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">会社名 *</label>
           <input type="text" required style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">担当者名 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">担当者名 *</label>
           <input type="text" required style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">メールアドレス *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">メールアドレス *</label>
           <input type="email" required style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">職種 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">職種 *</label>
           <input type="text" required placeholder="例: 配送スタッフ、Webエンジニア" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">勤務地 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">勤務地 *</label>
           <input type="text" required placeholder="例: 東京都渋谷区" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">給与 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">給与 *</label>
           <input type="text" required placeholder="例: 月給30万〜45万円" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">雇用形態 *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">雇用形態 *</label>
           <select required style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem;">
             <option value="">選択してください</option>
             <option>正社員</option><option>契約社員</option><option>業務委託</option>
@@ -308,7 +335,7 @@
           </select>
         </div>
         <div style="margin-bottom:14px;">
-          <label style="display:block; font-size:.85rem; color:#999; margin-bottom:4px;">仕事内容・アピールポイント *</label>
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">仕事内容・アピールポイント *</label>
           <textarea rows="5" required placeholder="仕事の内容、福利厚生、求める人材像など" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem; resize:vertical;"></textarea>
         </div>
         <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:100%; padding:14px; font-size:1rem;">無料で求人を掲載する</button>
@@ -345,8 +372,8 @@
           <div class="plan-price">¥30,000</div>
           <div class="plan-unit">/ 30日間</div>
           <ul class="plan-features">
-            <li>求人無制限掲載</li>
-            <li>トップページ最上部</li>
+            <li>求人3件まで掲載</li>
+            <li>トップページ最上部に表示</li>
             <li>SNS拡散サポート</li>
             <li>記事型PR掲載</li>
           </ul>
@@ -359,7 +386,146 @@
     <p>&copy; 2026 JobConnect. All rights reserved.</p>
   </footer>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
   <script>
+    // ── Firebase設定（後で実際のキーに差し替え） ──
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT",
+    };
+
+    let auth = null, db = null, currentUser = null, userRole = null;
+    const isFirebaseConfigured = !firebaseConfig.apiKey.startsWith('YOUR');
+
+    if (isFirebaseConfigured) {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      auth.onAuthStateChanged(user => {
+        currentUser = user;
+        if (user) loadUserRole();
+        else updateAuthBar();
+      });
+    }
+
+    // ── 認証モーダル ──
+    let pendingRole = 'seeker';
+
+    function showAuthModal(role) {
+      pendingRole = role;
+      const modal = document.getElementById('authModal');
+      const title = document.getElementById('authModalTitle');
+      const sub = document.getElementById('authModalSub');
+      if (role === 'company') {
+        title.textContent = '企業アカウント';
+        sub.textContent = '求人の掲載・編集・管理ができます';
+      } else {
+        title.textContent = '求職者アカウント';
+        sub.textContent = 'お気に入り保存・応募履歴の管理ができます';
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function handleGoogleLogin() {
+      if (!isFirebaseConfigured) {
+        // デモモード
+        currentUser = { uid: 'demo-' + pendingRole, displayName: 'デモユーザー', photoURL: '', email: 'demo@example.com' };
+        userRole = pendingRole;
+        closeAuthModal();
+        updateAuthBar();
+        alert(pendingRole === 'company' ? '企業アカウントでログインしました（デモ）' : '求職者アカウントでログインしました（デモ）');
+        return;
+      }
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).then(() => {
+        return saveUserRole(pendingRole);
+      }).then(() => {
+        closeAuthModal();
+        updateAuthBar();
+      });
+    }
+
+    async function saveUserRole(role) {
+      if (!db || !currentUser) return;
+      userRole = role;
+      await db.collection('users').doc(currentUser.uid).set({
+        role: role,
+        name: currentUser.displayName,
+        email: currentUser.email,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+    }
+
+    async function loadUserRole() {
+      if (!db || !currentUser) return;
+      const doc = await db.collection('users').doc(currentUser.uid).get();
+      if (doc.exists) {
+        userRole = doc.data().role;
+      }
+      updateAuthBar();
+    }
+
+    function updateAuthBar() {
+      const bar = document.getElementById('authBar');
+      if (currentUser) {
+        const roleLabel = userRole === 'company' ? '企業' : '求職者';
+        const roleColor = userRole === 'company' ? '#e65100' : '#1976d2';
+        bar.innerHTML = `
+          <span style="font-size:.8rem; padding:4px 10px; border-radius:12px; background:${roleColor}15; color:${roleColor}; font-weight:600;">${roleLabel}</span>
+          <span style="font-size:.85rem; color:#555;">${currentUser.displayName || 'ユーザー'}</span>
+          ${userRole === 'company' ? '<button onclick="showMyPage()" style="padding:5px 12px; border-radius:6px; font-size:.75rem; background:#f5f5f5; border:1px solid #ddd; color:#555; cursor:pointer;">マイページ</button>' : ''}
+          <button onclick="handleLogout()" style="padding:5px 10px; border-radius:6px; font-size:.75rem; background:none; border:1px solid #ddd; color:#999; cursor:pointer;">ログアウト</button>
+        `;
+      } else {
+        bar.innerHTML = `
+          <button onclick="showAuthModal('seeker')" style="padding:6px 14px; border-radius:8px; font-size:.8rem; font-weight:600; background:#f5f5f5; border:1px solid #ddd; color:#555; cursor:pointer;">求職者ログイン</button>
+          <button onclick="showAuthModal('company')" style="padding:6px 14px; border-radius:8px; font-size:.8rem; font-weight:600; background:linear-gradient(135deg,#ff9800,#ff5722); border:none; color:#fff; cursor:pointer;">企業ログイン</button>
+        `;
+      }
+    }
+
+    function handleLogout() {
+      if (isFirebaseConfigured) auth.signOut();
+      currentUser = null; userRole = null;
+      updateAuthBar();
+    }
+
+    // ── 企業マイページ ──
+    function showMyPage() {
+      const content = document.getElementById('myPageContent');
+      content.innerHTML = `
+        <div style="margin-bottom:20px;">
+          <p style="color:#888; font-size:.9rem;">ログイン中: <strong style="color:#333;">${currentUser.displayName || currentUser.email}</strong></p>
+          <p style="color:#888; font-size:.85rem;">アカウント種別: <span style="color:#e65100; font-weight:600;">企業</span></p>
+        </div>
+        <h4 style="color:#333; margin-bottom:12px;">掲載中の求人</h4>
+        <div style="background:#f9f9f9; border-radius:10px; padding:20px; text-align:center; color:#999; font-size:.9rem;">
+          掲載中の求人はありません。<br>
+          <a href="#post" onclick="closeMyPage()" style="color:#e65100; font-weight:600;">求人を掲載する →</a>
+        </div>
+        <div style="margin-top:24px; padding-top:20px; border-top:1px solid #eee;">
+          <h4 style="color:#333; margin-bottom:8px;">ご利用プラン</h4>
+          <p style="color:#888; font-size:.9rem;">無料プラン（50件まで掲載可能）</p>
+          <a href="#plans" onclick="closeMyPage()" style="font-size:.85rem; color:#e65100;">有料プランを見る →</a>
+        </div>
+      `;
+      document.getElementById('myPageModal').style.display = 'block';
+    }
+
+    function closeMyPage() {
+      document.getElementById('myPageModal').style.display = 'none';
+    }
+
+    // ── 求人検索・フィルター ──
     function filterJobs() {
       const q = document.getElementById('searchInput').value.toLowerCase();
       document.querySelectorAll('.job-card').forEach(card => {
@@ -383,7 +549,12 @@
 
     function handlePostJob(e) {
       e.preventDefault();
-      alert('求人掲載のお申し込みありがとうございます！\n内容を確認の上、1営業日以内に掲載いたします。');
+      if (!currentUser || userRole !== 'company') {
+        alert('求人を掲載するには企業アカウントでログインしてください。');
+        showAuthModal('company');
+        return false;
+      }
+      alert('求人掲載のお申し込みありがとうございます！\n内容を確認の上、1営業日以内に掲載いたします。\n\n掲載後はマイページから編集・削除が可能です。');
       e.target.reset();
       return false;
     }
