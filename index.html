@@ -185,28 +185,54 @@
   <hr class="divider">
 
   <!-- プレミアム・スタンダード枠（企業ログイン時 or 掲載ありの時のみ表示） -->
-  <section class="section" id="featured" style="display:none;">
-    <!-- プレミアム枠（最上部・限定3社） -->
-    <div id="premiumSlot" style="margin-bottom:32px;">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-        <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:linear-gradient(135deg,#ff9800,#ff5722); color:#fff;">PREMIUM</span>
-        <span style="font-size:.8rem; color:#888;">限定3社</span>
+  <!-- プレミアム枠（常時表示） -->
+  <section class="section" id="premiumSection">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+      <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:linear-gradient(135deg,#ff9800,#ff5722); color:#fff;">PREMIUM</span>
+      <span style="font-size:.8rem; color:#888;">注目の求人</span>
+    </div>
+    <!-- BURNING BROS. プレミアム表示 -->
+    <div class="job-card" style="border:2px solid #ff9800; cursor:pointer;" onclick="showJobDetail('bb-01')">
+      <div class="job-header">
+        <div>
+          <div class="job-company">BURNING BROS.株式会社</div>
+          <div class="job-title">配送スタッフ（軽貨物ドライバー）</div>
+        </div>
+        <div class="job-salary">月給 40万〜45万円</div>
       </div>
-      <div style="background:#fff; border:2px solid #ff9800; border-radius:16px; padding:28px; text-align:center; color:#888; font-size:.9rem;">
-        プレミアム掲載枠（空き: 3社）<br>
-        <a href="#plans" style="color:#ff9800; font-weight:600;">プレミアムプランで掲載する →</a>
+      <div class="job-tags">
+        <span class="job-tag">配送</span>
+        <span class="job-tag">業務委託</span>
+        <span class="job-tag">未経験OK</span>
+        <span class="job-tag">年齢不問</span>
+        <span class="job-tag">神奈川</span>
+      </div>
+      <div class="job-info">
+        <div class="job-info-item">勤務地: <span>神奈川県横浜市・座間市</span></div>
+        <div class="job-info-item">雇用形態: <span>業務委託</span></div>
+      </div>
+      <div style="text-align:right; margin-top:8px;">
+        <span style="font-size:.8rem; color:#ff9800; font-weight:600;">詳細を見る →</span>
       </div>
     </div>
+  </section>
 
-    <!-- スタンダード枠（限定10社） -->
-    <div id="standardSlot" style="margin-bottom:32px;">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-        <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:#ff9800; color:#fff;">STANDARD</span>
-        <span style="font-size:.8rem; color:#888;">限定10社</span>
+  <!-- 企業ログイン時のみ表示される枠 -->
+  <section class="section" id="featured" style="display:none;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+      <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:#ff9800; color:#fff;">掲載枠</span>
+      <span style="font-size:.8rem; color:#888;">有料プランで上位表示</span>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="background:#fff; border:2px solid #ff9800; border-radius:12px; padding:20px; text-align:center;">
+        <div style="font-size:.85rem; font-weight:700; color:#ff9800;">PREMIUM枠</div>
+        <div style="font-size:.8rem; color:#888; margin:4px 0;">空き: 2社</div>
+        <a href="#plans" style="font-size:.75rem; color:#ff9800;">詳細 →</a>
       </div>
-      <div style="background:#fff; border:1px solid #ffcc80; border-radius:16px; padding:28px; text-align:center; color:#888; font-size:.9rem;">
-        スタンダード掲載枠（空き: 10社）<br>
-        <a href="#plans" style="color:#ff9800; font-weight:600;">スタンダードプランで掲載する →</a>
+      <div style="background:#fff; border:1px solid #ffcc80; border-radius:12px; padding:20px; text-align:center;">
+        <div style="font-size:.85rem; font-weight:700; color:#ff9800;">STANDARD枠</div>
+        <div style="font-size:.8rem; color:#888; margin:4px 0;">空き: 10社</div>
+        <a href="#plans" style="font-size:.75rem; color:#ff9800;">詳細 →</a>
       </div>
     </div>
   </section>
@@ -355,7 +381,7 @@
       <div class="plan-grid">
         <div class="plan-card featured">
           <div class="plan-name" style="color:#ff9800;">スタンダードプラン</div>
-          <div class="plan-price">¥15,000</div>
+          <div class="plan-price">¥5,000</div>
           <div class="plan-unit">/ 30日間</div>
           <p style="font-size:.75rem; color:#ef5350; font-weight:700; margin-bottom:8px;">限定10社</p>
           <ul class="plan-features">
@@ -367,7 +393,7 @@
         </div>
         <div class="plan-card">
           <div class="plan-name">プレミアムプラン</div>
-          <div class="plan-price">¥30,000</div>
+          <div class="plan-price">¥10,000</div>
           <div class="plan-unit">/ 30日間</div>
           <p style="font-size:.75rem; color:#ef5350; font-weight:700; margin-bottom:8px;">限定3社</p>
           <ul class="plan-features">
