@@ -748,13 +748,69 @@
         alert('無料掲載の上限（3件）に達しています。\n4件目以降は有料プランをご利用ください。');
         return false;
       }
+      // フォームデータ収集
+      const formData = new FormData(e.target);
+      const inputs = e.target.querySelectorAll('input, select, textarea');
+      const jobPost = {
+        userId: currentUser.uid,
+        userName: currentUser.displayName || '',
+        userEmail: currentUser.email || '',
+        company: inputs[0]?.value || '',
+        contactName: inputs[1]?.value || '',
+        email: inputs[2]?.value || '',
+        position: inputs[3]?.value || '',
+        location: inputs[4]?.value || '',
+        salary: inputs[5]?.value || '',
+        employmentType: inputs[6]?.value || '',
+        description: inputs[7]?.value || '',
+        applyMethod: document.getElementById('applyMethod')?.value || '',
+        status: 'pending', // pending → approved → rejected
+        createdAt: new Date().toISOString(),
+      };
+
       freePostCount++;
-      if (db && currentUser) {
+
+      // Firestoreに保存
+      if (db) {
+        db.collection('jobPosts').add(jobPost);
         db.collection('users').doc(currentUser.uid).set({ freePostCount: freePostCount }, { merge: true });
       }
+
+      // Discord Webhook通知
+      sendDiscordNotification(jobPost);
+
       alert('求人を投稿しました！\n内容を審査の上、1営業日以内に公開いたします。\n\n残りの無料掲載枠: ' + (3 - freePostCount) + '件');
       e.target.reset();
       return false;
+    }
+
+    // Discord Webhook通知
+    const DISCORD_WEBHOOK = ''; // ← ここにWebhook URLを設定
+    function sendDiscordNotification(job) {
+      if (!DISCORD_WEBHOOK) return;
+      const embed = {
+        embeds: [{
+          title: '📋 新規求人掲載申請',
+          color: 0xff9800,
+          fields: [
+            { name: '会社名', value: job.company, inline: true },
+            { name: '担当者', value: job.contactName, inline: true },
+            { name: 'メール', value: job.email, inline: true },
+            { name: '職種', value: job.position, inline: true },
+            { name: '勤務地', value: job.location, inline: true },
+            { name: '給与', value: job.salary, inline: true },
+            { name: '雇用形態', value: job.employmentType, inline: true },
+            { name: '応募方法', value: job.applyMethod, inline: true },
+            { name: '仕事内容', value: job.description.substring(0, 200) + '...' },
+          ],
+          timestamp: new Date().toISOString(),
+        }]
+      };
+      fetch(DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(embed),
+      }).catch(() => {});
     }
   </script>
 </body>
