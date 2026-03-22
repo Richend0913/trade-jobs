@@ -174,8 +174,8 @@
 
   <hr class="divider">
 
-  <!-- プレミアム・スタンダード枠 -->
-  <section class="section" id="featured">
+  <!-- プレミアム・スタンダード枠（企業ログイン時 or 掲載ありの時のみ表示） -->
+  <section class="section" id="featured" style="display:none;">
     <!-- プレミアム枠（最上部・限定3社） -->
     <div id="premiumSlot" style="margin-bottom:32px;">
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
@@ -545,13 +545,16 @@
     function updatePostForm() {
       const locked = document.getElementById('postFormLocked');
       const unlocked = document.getElementById('postFormUnlocked');
+      const featured = document.getElementById('featured');
       if (!locked || !unlocked) return;
       if (currentUser && userRole === 'company') {
         locked.style.display = 'none';
         unlocked.style.display = 'block';
+        if (featured) featured.style.display = 'block';
       } else {
         locked.style.display = 'block';
         unlocked.style.display = 'none';
+        if (featured) featured.style.display = 'none';
       }
     }
 
