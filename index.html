@@ -148,6 +148,14 @@
     </div>
   </div>
 
+  <!-- 求人詳細モーダル -->
+  <div id="jobDetailModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.5); z-index:200; overflow-y:auto;">
+    <div style="background:#fff; border-radius:16px; padding:0; max-width:640px; width:92%; margin:60px auto 40px; position:relative; overflow:hidden;">
+      <button onclick="closeJobDetail()" style="position:absolute; top:12px; right:16px; background:rgba(0,0,0,.3); border:none; font-size:1.3rem; color:#fff; cursor:pointer; width:36px; height:36px; border-radius:50; z-index:10;">&times;</button>
+      <div id="jobDetailContent"></div>
+    </div>
+  </div>
+
   <!-- 企業マイページモーダル -->
   <div id="myPageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.5); z-index:200;">
     <div style="background:#fff; border-radius:16px; padding:36px; max-width:600px; width:90%; margin:15vh auto; position:relative; max-height:70vh; overflow-y:auto;">
@@ -226,76 +234,8 @@
       <span class="filter-tag" onclick="setFilter(this, '業務委託')">業務委託</span>
     </div>
 
-    <!-- 求人カード1: BURNING BROS. -->
-    <div class="job-card" data-keywords="配送 ドライバー 神奈川 横浜 座間 未経験OK 業務委託 BURNING BROS">
-      <div class="job-header">
-        <div>
-          <div class="job-company">BURNING BROS.株式会社</div>
-          <div class="job-title">配送スタッフ（軽貨物ドライバー）</div>
-        </div>
-        <div class="job-salary">月給 40万〜45万円</div>
-      </div>
-      <div class="job-tags">
-        <span class="job-tag">配送</span>
-        <span class="job-tag">業務委託</span>
-        <span class="job-tag">未経験OK</span>
-        <span class="job-tag">年齢不問</span>
-        <span class="job-tag">神奈川</span>
-      </div>
-      <div class="job-info">
-        <div class="job-info-item">勤務地: <span>神奈川県横浜市・座間市</span></div>
-        <div class="job-info-item">雇用形態: <span>業務委託</span></div>
-        <div class="job-info-item">免許: <span>普通自動車免許（AT可）</span></div>
-        <div class="job-info-item">給与形態: <span>歩合制（運んだ分だけ稼げる）</span></div>
-      </div>
-      <div class="job-desc">
-        小包の配送業務。配送先の約7〜8割は個人宅。基本的に荷物は小型で運びやすいです。横浜市・座間市エリアでの配送。
-      </div>
-      <ul class="job-features">
-        <li>未経験者歓迎・ブランクOK</li>
-        <li>制服・台車無料貸与</li>
-        <li>車両リース39,000円（車検・メンテ・修理・保険込み）</li>
-        <li>同乗研修制度あり</li>
-        <li>個別カウンセリングで働き方サポート</li>
-        <li>希望エリアに住める社宅制度あり</li>
-      </ul>
-      <a href="https://clients.itszai.jp/4e4441784e773d3d/recruitments/30?ref=true" target="_blank" rel="noopener" class="apply-btn">この求人に応募する</a>
-    </div>
-
-    <!-- 求人カード2: 大翔商配 -->
-    <div class="job-card" data-keywords="配送 ドライバー 東京 未経験OK 業務委託 大翔商配">
-      <div class="job-header">
-        <div>
-          <div class="job-company">株式会社大翔商配</div>
-          <div class="job-title">軽貨物配送ドライバー（東京エリア）</div>
-        </div>
-        <div class="job-salary">月給 40万〜70万円</div>
-      </div>
-      <div class="job-tags">
-        <span class="job-tag">配送</span>
-        <span class="job-tag">業務委託</span>
-        <span class="job-tag">未経験OK</span>
-        <span class="job-tag">年齢不問</span>
-        <span class="job-tag">東京</span>
-      </div>
-      <div class="job-info">
-        <div class="job-info-item">勤務地: <span>東京都内各エリア</span></div>
-        <div class="job-info-item">雇用形態: <span>業務委託</span></div>
-        <div class="job-info-item">免許: <span>普通自動車免許（AT可）</span></div>
-        <div class="job-info-item">給与形態: <span>完全出来高制</span></div>
-      </div>
-      <div class="job-desc">
-        東京都内での個人宅向け小包配送をお任せします。コンパクトな荷物が中心なので、体力に自信がない方でも安心。頑張った分がそのまま収入に直結する完全出来高制です。
-      </div>
-      <ul class="job-features">
-        <li>初めての方も安心の充実した研修制度</li>
-        <li>業務に必要な制服・台車はすべて無料支給</li>
-        <li>車両リース月39,000円（保険・車検・メンテナンス全込み）</li>
-        <li>先輩ドライバーとの同乗研修からスタート</li>
-        <li>専任スタッフが働き方を個別サポート</li>
-      </ul>
-      <a href="https://clients.itszai.jp/4e4441794e773d3d/recruitments/8?ref=true" target="_blank" rel="noopener" class="apply-btn">この求人に応募する</a>
-    </div>
+    <!-- 求人カード（JSで動的生成） -->
+    <div id="jobCards"></div>
 
   </section>
 
@@ -380,7 +320,27 @@
         </div>
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">仕事内容・アピールポイント *</label>
-          <textarea rows="5" required placeholder="仕事の内容、福利厚生、求める人材像など" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem; resize:vertical;"></textarea>
+          <textarea rows="5" required placeholder="仕事の内容、福利厚生、求める人材像など" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:8px; color:#333; font-size:1rem; resize:vertical;"></textarea>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">応募方法 *</label>
+          <select id="applyMethod" required onchange="toggleApplyFields()" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:8px; color:#333; font-size:1rem;">
+            <option value="">選択してください</option>
+            <option value="url">自社サイト（URL指定）</option>
+            <option value="line">LINE応募</option>
+            <option value="form">JobConnect内の応募フォーム</option>
+          </select>
+        </div>
+        <div id="applyUrlField" style="display:none; margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">応募先URL</label>
+          <input type="url" placeholder="https://example.com/apply" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:8px; color:#333; font-size:1rem;">
+        </div>
+        <div id="applyLineField" style="display:none; margin-bottom:14px;">
+          <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">LINE URL or LINE ID</label>
+          <input type="text" placeholder="https://line.me/R/ti/p/@xxxxx or @xxxxx" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:8px; color:#333; font-size:1rem;">
+        </div>
+        <div id="applyFormField" style="display:none; margin-bottom:14px; background:#f0f7f0; border-radius:8px; padding:12px;">
+          <p style="font-size:.85rem; color:#388e3c;">JobConnect内に専用の応募フォームを自動で作成します。応募があればメールで通知されます。</p>
         </div>
         <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:100%; padding:14px; font-size:1rem;">無料で求人を掲載する</button>
         <p style="text-align:center; font-size:.75rem; color:#666; margin-top:12px;">3件まで無料。4件目以降または上位表示は有料プランとなります。</p>
@@ -596,6 +556,143 @@
       document.getElementById('myPageModal').style.display = 'none';
     }
 
+    // ── 求人データ ──
+    const jobsData = [
+      {
+        id: 'bb-01',
+        company: 'BURNING BROS.株式会社',
+        title: '配送スタッフ（軽貨物ドライバー）',
+        salary: '月給 40万〜45万円',
+        tags: ['配送', '業務委託', '未経験OK', '年齢不問', '神奈川'],
+        location: '神奈川県横浜市・座間市',
+        type: '業務委託',
+        license: '普通自動車免許（AT可）',
+        salaryType: '歩合制（運んだ分だけ稼げる）',
+        desc: '小包の配送業務。配送先の約7〜8割は個人宅。基本的に荷物は小型で運びやすいです。横浜市・座間市エリアでの配送。',
+        features: [
+          '未経験者歓迎・ブランクOK',
+          '制服・台車無料貸与',
+          '車両リース39,000円（車検・メンテ・修理・保険込み）',
+          '同乗研修制度あり',
+          '個別カウンセリングで働き方サポート',
+          '希望エリアに住める社宅制度あり',
+        ],
+        applyType: 'url',
+        applyUrl: 'https://clients.itszai.jp/4e4441784e773d3d/recruitments/30?ref=true',
+        keywords: '配送 ドライバー 神奈川 横浜 座間 未経験OK 業務委託 BURNING BROS',
+      },
+      {
+        id: 'ds-01',
+        company: '株式会社大翔商配',
+        title: '軽貨物配送ドライバー（東京エリア）',
+        salary: '月給 40万〜70万円',
+        tags: ['配送', '業務委託', '未経験OK', '年齢不問', '東京'],
+        location: '東京都内各エリア',
+        type: '業務委託',
+        license: '普通自動車免許（AT可）',
+        salaryType: '完全出来高制',
+        desc: '東京都内での個人宅向け小包配送をお任せします。コンパクトな荷物が中心なので、体力に自信がない方でも安心。頑張った分がそのまま収入に直結する完全出来高制です。',
+        features: [
+          '初めての方も安心の充実した研修制度',
+          '業務に必要な制服・台車はすべて無料支給',
+          '車両リース月39,000円（保険・車検・メンテナンス全込み）',
+          '先輩ドライバーとの同乗研修からスタート',
+          '専任スタッフが働き方を個別サポート',
+        ],
+        applyType: 'url',
+        applyUrl: 'https://clients.itszai.jp/4e4441794e773d3d/recruitments/8?ref=true',
+        keywords: '配送 ドライバー 東京 未経験OK 業務委託 大翔商配',
+      },
+    ];
+
+    // ── カード描画 ──
+    function renderJobCards() {
+      const container = document.getElementById('jobCards');
+      if (!container) return;
+      container.innerHTML = jobsData.map(job => `
+        <div class="job-card" data-keywords="${job.keywords}" onclick="showJobDetail('${job.id}')" style="cursor:pointer;">
+          <div class="job-header">
+            <div>
+              <div class="job-company">${job.company}</div>
+              <div class="job-title">${job.title}</div>
+            </div>
+            <div class="job-salary">${job.salary}</div>
+          </div>
+          <div class="job-tags">
+            ${job.tags.map(t => `<span class="job-tag">${t}</span>`).join('')}
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">勤務地: <span>${job.location}</span></div>
+            <div class="job-info-item">雇用形態: <span>${job.type}</span></div>
+          </div>
+          <div style="text-align:right; margin-top:8px;">
+            <span style="font-size:.8rem; color:#ff9800; font-weight:600;">詳細を見る →</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── 詳細モーダル ──
+    function showJobDetail(jobId) {
+      const job = jobsData.find(j => j.id === jobId);
+      if (!job) return;
+
+      let applyBtnHtml = '';
+      if (job.applyType === 'url') {
+        applyBtnHtml = `<a href="${job.applyUrl}" target="_blank" rel="noopener" class="apply-btn" style="display:block; text-align:center; width:100%; padding:16px; font-size:1.1rem;">この求人に応募する</a>`;
+      } else if (job.applyType === 'line') {
+        applyBtnHtml = `<a href="${job.applyUrl}" target="_blank" rel="noopener" class="apply-btn" style="display:block; text-align:center; width:100%; padding:16px; font-size:1.1rem; background:linear-gradient(135deg,#06c755,#00b900);">LINEで応募する</a>`;
+      } else {
+        applyBtnHtml = `<button onclick="showInternalApplyForm('${job.id}')" class="apply-btn" style="display:block; text-align:center; width:100%; padding:16px; font-size:1.1rem; border:none; cursor:pointer;">応募フォームへ</button>`;
+      }
+
+      document.getElementById('jobDetailContent').innerHTML = `
+        <div style="background:linear-gradient(135deg,#fff5e6,#fff); padding:28px 24px 20px;">
+          <div style="font-size:.85rem; color:#ff9800; font-weight:600; margin-bottom:4px;">${job.company}</div>
+          <h2 style="font-size:1.4rem; font-weight:800; color:#333; margin-bottom:12px;">${job.title}</h2>
+          <div style="font-size:1.3rem; font-weight:800; color:#66bb6a; margin-bottom:12px;">${job.salary}</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            ${job.tags.map(t => `<span class="job-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
+            <div><span style="font-size:.8rem; color:#999;">勤務地</span><br><span style="font-size:.95rem; color:#333; font-weight:500;">${job.location}</span></div>
+            <div><span style="font-size:.8rem; color:#999;">雇用形態</span><br><span style="font-size:.95rem; color:#333; font-weight:500;">${job.type}</span></div>
+            <div><span style="font-size:.8rem; color:#999;">必要免許</span><br><span style="font-size:.95rem; color:#333; font-weight:500;">${job.license}</span></div>
+            <div><span style="font-size:.8rem; color:#999;">給与形態</span><br><span style="font-size:.95rem; color:#333; font-weight:500;">${job.salaryType}</span></div>
+          </div>
+          <h3 style="font-size:1rem; color:#333; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid #eee;">仕事内容</h3>
+          <p style="font-size:.9rem; color:#555; line-height:1.7; margin-bottom:24px;">${job.desc}</p>
+          <h3 style="font-size:1rem; color:#333; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid #eee;">特徴・福利厚生</h3>
+          <ul style="list-style:none; margin-bottom:28px;">
+            ${job.features.map(f => `<li style="font-size:.9rem; color:#555; padding:5px 0;">✓ ${f}</li>`).join('')}
+          </ul>
+          ${applyBtnHtml}
+        </div>
+      `;
+      document.getElementById('jobDetailModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeJobDetail() {
+      document.getElementById('jobDetailModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function showInternalApplyForm(jobId) {
+      const job = jobsData.find(j => j.id === jobId);
+      alert('応募フォーム（' + job.company + '）\nこの機能は近日公開予定です。');
+    }
+
+    // ── 掲載フォーム 応募方法切替 ──
+    function toggleApplyFields() {
+      const method = document.getElementById('applyMethod').value;
+      document.getElementById('applyUrlField').style.display = method === 'url' ? 'block' : 'none';
+      document.getElementById('applyLineField').style.display = method === 'line' ? 'block' : 'none';
+      document.getElementById('applyFormField').style.display = method === 'form' ? 'block' : 'none';
+    }
+
     // ── 求人検索・フィルター ──
     function filterJobs() {
       const q = document.getElementById('searchInput').value.toLowerCase();
@@ -617,6 +714,9 @@
         card.style.display = kw.includes(filter.toLowerCase()) ? '' : 'none';
       });
     }
+
+    // ── 初期描画 ──
+    document.addEventListener('DOMContentLoaded', renderJobCards);
 
     function handlePostJob(e) {
       e.preventDefault();
