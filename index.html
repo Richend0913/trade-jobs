@@ -348,8 +348,8 @@
       </div>
     </div>
 
-    <!-- 有料プラン -->
-    <div style="margin-top:60px;">
+    <!-- 有料プラン（企業ログイン時のみ表示） -->
+    <div id="pricingSection" style="margin-top:60px; display:none;">
       <h3 id="plans" style="color:#333; font-size:1.2rem; margin-bottom:8px; text-align:center;">有料プラン</h3>
       <p style="color:#888; text-align:center; margin-bottom:24px; font-size:.9rem;">4件目以降の掲載・上位表示をしたい企業様向け</p>
       <div class="plan-grid">
@@ -512,15 +512,18 @@
       const locked = document.getElementById('postFormLocked');
       const unlocked = document.getElementById('postFormUnlocked');
       const featured = document.getElementById('featured');
+      const pricing = document.getElementById('pricingSection');
       if (!locked || !unlocked) return;
       if (currentUser && userRole === 'company') {
         locked.style.display = 'none';
         unlocked.style.display = 'block';
         if (featured) featured.style.display = 'block';
+        if (pricing) pricing.style.display = 'block';
       } else {
         locked.style.display = 'block';
         unlocked.style.display = 'none';
         if (featured) featured.style.display = 'none';
+        if (pricing) pricing.style.display = 'none';
       }
     }
 
