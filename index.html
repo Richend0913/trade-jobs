@@ -165,7 +165,7 @@
       <div class="stats-row">
         <div class="stat-item"><div class="num">2</div><div class="label">掲載求人数</div></div>
         <div class="stat-item"><div class="num">2</div><div class="label">掲載企業数</div></div>
-        <div class="stat-item"><div class="num">無料</div><div class="label">初回1件掲載無料</div></div>
+        <div class="stat-item"><div class="num">無料</div><div class="label">掲載無料（3件まで）</div></div>
       </div>
       <a href="#jobs" class="btn-primary">求人を見る</a>
       <div style="margin-top:16px;">
@@ -306,7 +306,7 @@
     <div class="free-banner">
       <h2>求人掲載しませんか？</h2>
       <div class="highlight">今なら無料！</div>
-      <p>1アカウントにつき初回1件無料で掲載できます。今すぐ求人を掲載しよう。</p>
+      <p>1アカウントにつき3件まで無料で掲載できます。投稿後は審査を経て公開されます。</p>
       <a href="#post-flow" class="btn-primary">無料で掲載する</a>
     </div>
 
@@ -316,14 +316,18 @@
     <div class="post-flow">
       <div class="flow-item">
         <div class="flow-num">1</div>
-        <div><h3>求人情報を送信</h3><p>下のフォームから会社名・職種・条件などを入力して送信。</p></div>
+        <div><h3>企業アカウントで登録</h3><p>Googleアカウントでかんたん登録。</p></div>
       </div>
       <div class="flow-item">
         <div class="flow-num">2</div>
-        <div><h3>内容確認・掲載</h3><p>内容を確認後、1営業日以内にサイトに掲載します。</p></div>
+        <div><h3>求人情報を投稿</h3><p>フォームから会社名・職種・条件などを入力して送信。3件まで無料。</p></div>
       </div>
       <div class="flow-item">
         <div class="flow-num">3</div>
+        <div><h3>審査・公開</h3><p>内容を審査後、1営業日以内にサイトに公開されます。</p></div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">4</div>
         <div><h3>応募者とマッチング</h3><p>求職者からの応募を受け付け開始。応募はメールで通知されます。</p></div>
       </div>
     </div>
@@ -340,7 +344,7 @@
       <!-- 企業ログイン時 -->
       <div id="postFormUnlocked" style="display:none; background:#fff; border:1px solid #eee; border-radius:16px; padding:36px; box-shadow:0 2px 12px rgba(0,0,0,.06);">
         <h3 style="color:#333; font-size:1.2rem; margin-bottom:4px; text-align:center;">求人掲載フォーム</h3>
-        <p style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;">初回1件無料で掲載できます</p>
+        <p style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;">3件まで無料で掲載可能。投稿後、審査を経て公開されます。</p>
       <form onsubmit="return handlePostJob(event)">
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">会社名 *</label>
@@ -379,15 +383,15 @@
           <textarea rows="5" required placeholder="仕事の内容、福利厚生、求める人材像など" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#fff; font-size:1rem; resize:vertical;"></textarea>
         </div>
         <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:100%; padding:14px; font-size:1rem;">無料で求人を掲載する</button>
-        <p style="text-align:center; font-size:.75rem; color:#666; margin-top:12px;">初回1件無料。2件目以降は有料プランとなります。</p>
+        <p style="text-align:center; font-size:.75rem; color:#666; margin-top:12px;">3件まで無料。4件目以降または上位表示は有料プランとなります。</p>
       </form>
       </div>
     </div>
 
     <!-- 有料プラン -->
     <div style="margin-top:60px;">
-      <h3 id="plans" style="color:#333; font-size:1.2rem; margin-bottom:8px; text-align:center;">有料プラン（2件目以降）</h3>
-      <p style="color:#888; text-align:center; margin-bottom:24px; font-size:.9rem;">複数の求人を掲載したい企業様向け</p>
+      <h3 id="plans" style="color:#333; font-size:1.2rem; margin-bottom:8px; text-align:center;">有料プラン</h3>
+      <p style="color:#888; text-align:center; margin-bottom:24px; font-size:.9rem;">4件目以降の掲載・上位表示をしたい企業様向け</p>
       <div class="plan-grid">
         <div class="plan-card">
           <div class="plan-name">ライトプラン</div>
@@ -448,7 +452,7 @@
       appId: "1:901090319111:web:2a5eff8792cc964d54c3a2",
     };
 
-    let auth = null, db = null, currentUser = null, userRole = null, hasUsedFreeTrial = false;
+    let auth = null, db = null, currentUser = null, userRole = null, freePostCount = 0;
     const isFirebaseConfigured = !firebaseConfig.apiKey.startsWith('YOUR');
 
     if (isFirebaseConfigured) {
@@ -519,7 +523,7 @@
       const doc = await db.collection('users').doc(currentUser.uid).get();
       if (doc.exists) {
         userRole = doc.data().role;
-        hasUsedFreeTrial = doc.data().freeUsed || false;
+        freePostCount = doc.data().freePostCount || 0;
       }
       updateAuthBar();
     }
@@ -621,15 +625,15 @@
         showAuthModal('company');
         return false;
       }
-      if (hasUsedFreeTrial) {
-        alert('無料掲載は1アカウントにつき1回のみです。\n2件目以降は有料プランをご利用ください。');
+      if (freePostCount >= 3) {
+        alert('無料掲載の上限（3件）に達しています。\n4件目以降は有料プランをご利用ください。');
         return false;
       }
-      hasUsedFreeTrial = true;
+      freePostCount++;
       if (db && currentUser) {
-        db.collection('users').doc(currentUser.uid).set({ freeUsed: true }, { merge: true });
+        db.collection('users').doc(currentUser.uid).set({ freePostCount: freePostCount }, { merge: true });
       }
-      alert('求人掲載のお申し込みありがとうございます！\n内容を確認の上、1営業日以内に掲載いたします。\n\n掲載後はマイページから編集・削除が可能です。');
+      alert('求人を投稿しました！\n内容を審査の上、1営業日以内に公開いたします。\n\n残りの無料掲載枠: ' + (3 - freePostCount) + '件');
       e.target.reset();
       return false;
     }
