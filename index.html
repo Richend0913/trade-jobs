@@ -174,6 +174,35 @@
 
   <hr class="divider">
 
+  <!-- プレミアム・スタンダード枠 -->
+  <section class="section" id="featured">
+    <!-- プレミアム枠（最上部・限定3社） -->
+    <div id="premiumSlot" style="margin-bottom:32px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:linear-gradient(135deg,#ff9800,#ff5722); color:#fff;">PREMIUM</span>
+        <span style="font-size:.8rem; color:#888;">限定3社</span>
+      </div>
+      <div style="background:#fff; border:2px solid #ff9800; border-radius:16px; padding:28px; text-align:center; color:#888; font-size:.9rem;">
+        プレミアム掲載枠（空き: 3社）<br>
+        <a href="#plans" style="color:#ff9800; font-weight:600;">プレミアムプランで掲載する →</a>
+      </div>
+    </div>
+
+    <!-- スタンダード枠（限定10社） -->
+    <div id="standardSlot" style="margin-bottom:32px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <span style="padding:4px 12px; border-radius:20px; font-size:.7rem; font-weight:700; background:#ff9800; color:#fff;">STANDARD</span>
+        <span style="font-size:.8rem; color:#888;">限定10社</span>
+      </div>
+      <div style="background:#fff; border:1px solid #ffcc80; border-radius:16px; padding:28px; text-align:center; color:#888; font-size:.9rem;">
+        スタンダード掲載枠（空き: 10社）<br>
+        <a href="#plans" style="color:#ff9800; font-weight:600;">スタンダードプランで掲載する →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <!-- 求人一覧 -->
   <section class="section" id="jobs">
     <h2 class="section-title">求人一覧</h2>
@@ -297,10 +326,19 @@
       </div>
     </div>
 
-    <!-- 掲載フォーム -->
-    <div style="max-width:600px; margin:40px auto 0; background:#fff; border:1px solid #eee; border-radius:16px; padding:36px; box-shadow:0 2px 12px rgba(0,0,0,.06);">
-      <h3 style="color:#333; font-size:1.2rem; margin-bottom:4px; text-align:center;">求人掲載フォーム</h3>
-      <p style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;">企業アカウントでログイン後、求人を掲載できます</p>
+    <!-- 掲載フォーム（企業ログイン時のみ表示） -->
+    <div id="postFormArea" style="max-width:600px; margin:40px auto 0;">
+      <!-- 未ログイン時 -->
+      <div id="postFormLocked" style="background:#fff; border:1px solid #eee; border-radius:16px; padding:48px 36px; box-shadow:0 2px 12px rgba(0,0,0,.06); text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:16px;">🔒</div>
+        <h3 style="color:#333; font-size:1.2rem; margin-bottom:8px;">企業アカウントでログインしてください</h3>
+        <p style="color:#888; font-size:.9rem; margin-bottom:24px;">求人を掲載するには企業アカウントでのログインが必要です。</p>
+        <button onclick="showAuthModal('company')" class="btn-primary" style="border:none; cursor:pointer;">企業アカウントで新規登録 / ログイン</button>
+      </div>
+      <!-- 企業ログイン時 -->
+      <div id="postFormUnlocked" style="display:none; background:#fff; border:1px solid #eee; border-radius:16px; padding:36px; box-shadow:0 2px 12px rgba(0,0,0,.06);">
+        <h3 style="color:#333; font-size:1.2rem; margin-bottom:4px; text-align:center;">求人掲載フォーム</h3>
+        <p style="color:#888; font-size:.85rem; text-align:center; margin-bottom:24px;">初回1件無料で掲載できます</p>
       <form onsubmit="return handlePostJob(event)">
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:.85rem; color:#666; margin-bottom:4px;">会社名 *</label>
@@ -341,6 +379,7 @@
         <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:100%; padding:14px; font-size:1rem;">無料で求人を掲載する</button>
         <p style="text-align:center; font-size:.75rem; color:#666; margin-top:12px;">初回1件無料。2件目以降は有料プランとなります。</p>
       </form>
+      </div>
     </div>
 
     <!-- 有料プラン -->
@@ -362,6 +401,7 @@
           <div class="plan-name" style="color:#ff9800;">スタンダードプラン</div>
           <div class="plan-price">¥15,000</div>
           <div class="plan-unit">/ 30日間</div>
+          <p style="font-size:.75rem; color:#ef5350; font-weight:700; margin-bottom:8px;">限定10社</p>
           <ul class="plan-features">
             <li>求人3件まで掲載</li>
             <li>トップページに表示</li>
@@ -373,11 +413,12 @@
           <div class="plan-name">プレミアムプラン</div>
           <div class="plan-price">¥30,000</div>
           <div class="plan-unit">/ 30日間</div>
+          <p style="font-size:.75rem; color:#ef5350; font-weight:700; margin-bottom:8px;">限定3社</p>
           <ul class="plan-features">
             <li>求人3件まで掲載</li>
-            <li>トップページ最上部に表示</li>
+            <li>トップページ上部に表示</li>
             <li>SNS拡散サポート</li>
-            <li>記事型PR掲載</li>
+            <li>記事型PR掲載（専用ページ）</li>
           </ul>
           <a href="https://buy.stripe.com/test_fZu28qehZ1gV3Vz4e48Zq05" target="_blank" rel="noopener" class="apply-btn" style="display:block; text-align:center;">購入する</a>
         </div>
@@ -497,6 +538,20 @@
           <button onclick="showAuthModal('seeker')" style="padding:5px 10px; border-radius:6px; font-size:.7rem; font-weight:600; background:#f5f5f5; border:1px solid #ddd; color:#555; cursor:pointer; white-space:nowrap;">新規登録 / ログイン</button>
           <button onclick="showAuthModal('company')" style="padding:5px 10px; border-radius:6px; font-size:.7rem; font-weight:600; background:linear-gradient(135deg,#ff9800,#ff5722); border:none; color:#fff; cursor:pointer; white-space:nowrap;">企業の方</button>
         `;
+      }
+      updatePostForm();
+    }
+
+    function updatePostForm() {
+      const locked = document.getElementById('postFormLocked');
+      const unlocked = document.getElementById('postFormUnlocked');
+      if (!locked || !unlocked) return;
+      if (currentUser && userRole === 'company') {
+        locked.style.display = 'none';
+        unlocked.style.display = 'block';
+      } else {
+        locked.style.display = 'block';
+        unlocked.style.display = 'none';
       }
     }
 
